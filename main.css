@@ -1,0 +1,149 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url("https://images.unsplash.com/photo-1637269235441-c676660d568a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.wrapper {
+    background-color: rgba(255, 192, 203, 0.205);
+    width: 80vw;
+    height: 95vh;
+    margin: 10px auto 0 auto;
+    padding: 3px;
+    border-radius: 15px;
+}
+
+nav {
+    background-color: white;
+    /* background-image: linear-gradient(aquamarine, white); */
+    width: 60vw;
+    height: 10vh;
+    margin: 0 auto 0 auto;
+    padding: 10px 10px 0 10px;
+}
+
+.navBtn {
+    height: 50px;
+    background-color: white;
+    border-top: 2px solid pink;
+    border-left: 2px solid pink;
+    border-right: 2px solid pink;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    font-size: 1.5rem;
+    color: rgb(255, 140, 159);
+}
+
+.navBtn:hover {
+    background-color: pink;
+}
+
+.inputHead {
+    width: 60vw;
+    height: 20vh;
+    /* background-color: aquamarine; */
+    background-color: white;
+    margin: 25px auto 0 auto;
+    border-radius: 5px 5px 0 0;
+    padding: 10px;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+}
+
+.txt {
+    width: 70%;
+    height: 50px;
+    font-size: 1.7rem;
+    margin: 5px;
+    border-radius: 3px;
+    background-color: white;
+    border: 1px solid pink;
+    color: rgb(255, 140, 159);
+}
+
+.addToList {
+    width: 25%;
+    height: 50px;
+    margin: 5px;
+    border-radius: 3px;
+    font-size: 1.7rem;
+    background-color: white;
+    border: 1px solid pink;
+    color: rgb(255, 140, 159);
+    text-align: center;
+}
+
+.addToList:hover {
+    border: 1px solid bisque;
+}
+
+.toDoList {
+    background-color: white;
+    width: 60vw;
+    height: 60%;
+    margin: 0 auto 0 auto;
+    border-radius: 0 0 5px 5px;
+    overflow: scroll;
+    /* border: 1px solid rgba(0,0,0,.125); */
+}
+
+ul {
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 0;
+    padding: 0;
+}
+
+span {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 1.5rem;
+    border-top: 1px solid rgba(255, 192, 203, 0.411);
+    border-bottom: 1px solid rgba(255, 192, 203, 0.411);
+    text-decoration: none;
+}
+
+.removeBtn {
+    background-color: white;
+    border: none;
+    width: 25px;
+    color:grey;
+    font-size: 1.5rem;
+}
+.removeBtn:hover {
+    border: 1px solid lightblue;
+}
+
+.checkbox {
+    cursor: pointer;
+    margin-top: 14px;
+}
+
+.toDoLi {
+    list-style: none;
+    color:rgb(255, 140, 159);
+    flex: 3;
+    margin: 5px;
+    padding-left: 15px;
+    /* text-decoration: none; */
+}
+
+.done {
+    text-decoration: line-through;
+}
+
+@media (max-width: 450px) {
+    .inputHead, nav, .wrapper, .toDoList {
+        width: 100vw;
+    }
+
+}
