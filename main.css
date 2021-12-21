@@ -7,6 +7,7 @@ body {
     background-image: url("https://images.unsplash.com/photo-1637269235441-c676660d568a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80");
     background-size: cover;
     background-repeat: no-repeat;
+    height: 100vh;
 }
 
 .wrapper {
@@ -137,6 +138,13 @@ span {
     /* text-decoration: none; */
 }
 
+.inputTxt {
+    border: none;
+    color:rgb(255, 140, 159);
+    font-size: 1.5rem;
+    width: 100%;
+}
+
 .done {
     text-decoration: line-through;
 }
@@ -144,6 +152,9 @@ span {
 @media (max-width: 450px) {
     .inputHead, nav, .wrapper, .toDoList {
         width: 100vw;
+    }
+    .wrapper {
+        height: 100vh;
     }
 
 }

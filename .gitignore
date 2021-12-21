@@ -1,3 +1,6 @@
-.vscode
+.vscode/
 test.html
 test.js
+testing.js
+.gitignore
+todo.txt
