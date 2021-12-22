@@ -114,46 +114,32 @@ const removeItem = (e) => {
     const elementId = e.target.id; // id of target to search index of item in LS
     const getIndex = getSaved.findIndex(x => x.id == elementId); //find index in LS stored data to remove
     const deleted = getSaved.splice(getIndex, 1); // splice the deleted task from LS list
-    console.log("the deleted element: ", deleted);
-    console.log("localStorage after: ", getSaved);
     localStorage.setItem("toDos", JSON.stringify(getSaved)); // save updatet list to LS
     element.remove();
+};
+
+const checkTodo = (e) => {
+    const getSaved = JSON.parse(localStorage.getItem("toDos"));
+    const listItem = e.target.parentElement.childNodes[1].childNodes[0]; // the element to line-through
+    listItem.classList.toggle("done");
+    const listId = e.target.parentElement.id // id of target to search index in LS
+    const indexOfItem = getSaved.findIndex(x => x.id == listId); //find index in LS stored data to place in doneToDo
+    const doneToDo = getSaved.slice(indexOfItem);
+    const done = {
+        id: doneToDo[0].id,
+        task: doneToDo[0].task
+    };
+    let completedToDo = JSON.parse(localStorage.getItem("completed")) || [];
+    completedToDo.push(done);
+    localStorage.setItem("completed", JSON.stringify(completedToDo));
 };
 
 // list of EventListeners
 document.addEventListener("DOMContentLoaded", getLocalStorage);
 document.querySelector(".addToList").addEventListener('click', addToDo);
 document.querySelector("ul").addEventListener('click', checkDoneOrDelete);
-//document.querySelectorAll(".removeBtn").addEventListener('click', removeItem);
+
 
 //variables to store input
 let activeToDo = [];
 let completedToDo = [];
-
-function checkTodo(e) {
-    const listItem = e.target.parentElement.childNodes[1];
-    console.log("targeted item: ", listItem);
-    listItem.classList.toggle("done");
-
-    //move done toDos from localStorage toDos to completed localStorage 
-    const listId = e.target.parentElement.id
-    console.log("targeted items ID: ", listId);
-
-    const getSaved = JSON.parse(localStorage.getItem("toDos"));
-    const indexOfItem = getSaved.indexOf(e => e.id == listId);
-    console.log("index of done todo: ", indexOfItem);
-
-    const doneToDo = getSaved.splice(indexOfItem, 1);
-    console.log("the done todo: ", doneToDo);
-    console.log("after splice: ", getSaved)
-
-    //make this to a function like savetoLocal storage
-    let completedToDo;
-    if (localStorage.getItem("completed") === null) {
-        completedToDo = [];
-    } else {
-        completedToDo = JSON.parse(localStorage.getItem("completed"));
-    };
-    completedToDo.push(doneToDo);
-    localStorage.setItem("completed", JSON.stringify(completedToDo));
-};
