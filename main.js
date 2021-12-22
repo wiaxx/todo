@@ -10,8 +10,20 @@ async function getBgImg() {
 window.addEventListener('load', getBgImg);
 */
 
+const updateToDo = (e) => {
+    /*
+    e.target.addEventListener('dblclick', () => {
+        console.log('hej')
+        e.target.readOnly = false;
+
+    })
+    */
+
+    e.target.addEventListener("dblclick", () => console.log('hejsan'))
+}
+
 // create html element from saved todo list
-const createHtmlElement = (list) => {
+const createHtmlElement = (list, done) => {
     list.forEach(element => {
         let span = document.createElement("span");
         let btn = document.createElement("button")
@@ -26,7 +38,7 @@ const createHtmlElement = (list) => {
         checkbox.setAttribute("type", "checkbox");
         checkbox.classList.add("checkbox");
         li.classList.add("toDoLi");
-        input.classList.add("inputTxt");
+        input.classList.add('inputTxt');
         input.readOnly = true;
 
         input.value = element.task;
@@ -39,7 +51,8 @@ const createHtmlElement = (list) => {
 // get todos from localStorage and pass the list to function for create html
 const getLocalStorage = () => {
     let toDoList = JSON.parse(localStorage.getItem('toDos')) || [];
-    createHtmlElement(toDoList);
+    let doneList = JSON.parse(localStorage.getItem('completed')) || [];
+    createHtmlElement(toDoList, doneList);
 };
 
 // save to do-input in localStorage
@@ -64,7 +77,7 @@ const addToDo = (e) => {
             task: txtInput
         };
 
-        // kalla på function för att spara to do i localStorage
+        // save input to localStorage
         saveToLocalStorage(inputToDo);
 
         // create element to show input todo on page
@@ -101,9 +114,12 @@ const addToDo = (e) => {
 const checkDoneOrDelete = (e) => {
     if (e.target.classList == 'checkbox') {
         checkTodo(e);
-    }
+    };
     if (e.target.classList == 'removeBtn') {
         removeItem(e);
+    };
+    if (e.target.classList == 'inputTxt') {
+        updateToDo(e);
     };
 };
 
@@ -119,19 +135,23 @@ const removeItem = (e) => {
 };
 
 const checkTodo = (e) => {
-    const getSaved = JSON.parse(localStorage.getItem("toDos"));
     const listItem = e.target.parentElement.childNodes[1].childNodes[0]; // the element to line-through
-    listItem.classList.toggle("done");
-    const listId = e.target.parentElement.id // id of target to search index in LS
-    const indexOfItem = getSaved.findIndex(x => x.id == listId); //find index in LS stored data to place in doneToDo
-    const doneToDo = getSaved.slice(indexOfItem);
-    const done = {
-        id: doneToDo[0].id,
-        task: doneToDo[0].task
+    if (listItem.classList == 'inputTxt done') {
+        return;
+    } else {
+        listItem.classList.add('done')
+        const getSaved = JSON.parse(localStorage.getItem("toDos"));
+        const listId = e.target.parentElement.id // id of target to search index in LS
+        const indexOfItem = getSaved.findIndex(x => x.id == listId); //find index in LS stored data to place in doneToDo
+        const doneToDo = getSaved.slice(indexOfItem);
+        const done = {
+            id: doneToDo[0].id,
+            task: doneToDo[0].task
+        };
+        let completedToDo = JSON.parse(localStorage.getItem("completed")) || [];
+        completedToDo.push(done);
+        localStorage.setItem("completed", JSON.stringify(completedToDo));
     };
-    let completedToDo = JSON.parse(localStorage.getItem("completed")) || [];
-    completedToDo.push(done);
-    localStorage.setItem("completed", JSON.stringify(completedToDo));
 };
 
 // list of EventListeners
@@ -139,7 +159,25 @@ document.addEventListener("DOMContentLoaded", getLocalStorage);
 document.querySelector(".addToList").addEventListener('click', addToDo);
 document.querySelector("ul").addEventListener('click', checkDoneOrDelete);
 
-
 //variables to store input
 let activeToDo = [];
 let completedToDo = [];
+
+/*
+let test = [ {id: 1, task: 'hejsan'}, {id: 4, task: 'haha'}];
+let testar = [ {id: 1, task: 'hejsan'}, {id: 2, task: 'haha'}, {id: 4, task: 'ja'}, {id: 6, task: "ny"}]
+
+testar.forEach(element => {
+    let veta = test.includes(element)
+    // console.log(veta)
+    // console.log(element.id)
+})
+test.includes([1].id)
+
+for(let i = 0; i < test.length; i++) {
+    console.log('testar id: ', test[i].id)
+    if(test[i].id == test.id) {
+        console.log(i.id, test.id, 'finns');
+    }
+}
+*/
