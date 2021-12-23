@@ -39,12 +39,18 @@ const createHtmlElement = (list, done) => {
         checkbox.classList.add("checkbox");
         li.classList.add("toDoLi");
         input.classList.add('inputTxt');
+        input.setAttribute('id', `i${element.id}`);
         input.readOnly = true;
 
         input.value = element.task;
         li.append(input);
         span.append(checkbox, li, btn);
         document.querySelector("ul").appendChild(span);
+    });
+
+    done.forEach(element => {
+        let inputField = document.querySelector(`#i${element.id}`);
+        inputField.classList.add('done');
     });
 };
 

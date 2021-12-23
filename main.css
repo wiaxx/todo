@@ -44,6 +44,11 @@ nav {
     background-color: pink;
 }
 
+.navBtn:active {
+    background-color: rgb(255, 131, 152);
+    color: white;
+}
+
 .inputHead {
     width: 60vw;
     height: 20vh;
