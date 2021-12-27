@@ -56,6 +56,7 @@ const createHtmlElement = (list, done) => {
 
 // get todos from localStorage and pass the list to function for create html
 const getLocalStorage = () => {
+    document.querySelector('ul').innerHTML = '';
     let toDoList = JSON.parse(localStorage.getItem('toDos')) || [];
     let doneList = JSON.parse(localStorage.getItem('completed')) || [];
     createHtmlElement(toDoList, doneList);
@@ -194,6 +195,7 @@ const showCompleted = () => {
 document.addEventListener("DOMContentLoaded", getLocalStorage);
 document.querySelector(".addToList").addEventListener('click', addToDo);
 document.querySelector("ul").addEventListener('click', checkDoneOrDelete);
+document.querySelector('#all').addEventListener('click', getLocalStorage);
 document.querySelector('#done').addEventListener('click', showCompleted);
 //document.querySelector('#active').addEventListener('click', showActive);
 
