@@ -160,30 +160,43 @@ const checkTodo = (e) => {
     };
 };
 
+const showCompleted = () => {
+    const ul = document.querySelector('ul');
+    ul.innerHTML = '';
+
+    let completedToDo = JSON.parse(localStorage.getItem("completed")) || [];
+    completedToDo.forEach(element => {
+        let span = document.createElement("span");
+        let btn = document.createElement("button")
+        let checkbox = document.createElement("input")
+        let li = document.createElement("li");
+        let input = document.createElement('input');
+
+        span.setAttribute("id", `${element.id}`);
+        btn.classList.add("removeBtn");
+        btn.setAttribute("id", `${element.id}`);
+        btn.textContent = "x";
+        checkbox.setAttribute("type", "checkbox");
+        checkbox.classList.add("checkbox");
+        li.classList.add("toDoLi");
+        input.classList.add('inputTxt');
+        input.setAttribute('id', `i${element.id}`);
+        input.readOnly = true;
+
+        input.value = element.task;
+        li.append(input);
+        span.append(checkbox, li, btn);
+        document.querySelector("ul").appendChild(span);
+    });
+};
+
 // list of EventListeners
 document.addEventListener("DOMContentLoaded", getLocalStorage);
 document.querySelector(".addToList").addEventListener('click', addToDo);
 document.querySelector("ul").addEventListener('click', checkDoneOrDelete);
+document.querySelector('#done').addEventListener('click', showCompleted);
+//document.querySelector('#active').addEventListener('click', showActive);
 
 //variables to store input
 let activeToDo = [];
 let completedToDo = [];
-
-/*
-let test = [ {id: 1, task: 'hejsan'}, {id: 4, task: 'haha'}];
-let testar = [ {id: 1, task: 'hejsan'}, {id: 2, task: 'haha'}, {id: 4, task: 'ja'}, {id: 6, task: "ny"}]
-
-testar.forEach(element => {
-    let veta = test.includes(element)
-    // console.log(veta)
-    // console.log(element.id)
-})
-test.includes([1].id)
-
-for(let i = 0; i < test.length; i++) {
-    console.log('testar id: ', test[i].id)
-    if(test[i].id == test.id) {
-        console.log(i.id, test.id, 'finns');
-    }
-}
-*/
