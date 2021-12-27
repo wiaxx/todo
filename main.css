@@ -40,13 +40,13 @@ nav {
     color: rgb(255, 140, 159);
 }
 
-.navBtn:hover {
-    background-color: pink;
-}
-
-.navBtn:active {
+.navBtnOn {
     background-color: rgb(255, 131, 152);
     color: white;
+}
+
+.navBtn:hover {
+    background-color: pink;
 }
 
 .inputHead {

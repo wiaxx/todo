@@ -18,9 +18,11 @@ const updateToDo = (e) => {
 
     })
     */
+   console.log(e.target)
+   e.target.readOnly = false;
 
     e.target.addEventListener("dblclick", () => console.log('hejsan'))
-}
+};
 
 // create html element from saved todo list
 const createHtmlElement = (list, done) => {
@@ -67,6 +69,10 @@ const saveToLocalStorage = (todo) => {
     let toDoList = JSON.parse(localStorage.getItem('toDos')) || [];
     toDoList.push(todo);
     localStorage.setItem("toDos", JSON.stringify(toDoList));
+
+    let activeToDo = JSON.parse(localStorage.getItem('active')) || [];
+    activeToDo.push(todo);
+    localStorage.setItem("active", JSON.stringify(activeToDo));
 };
 
 // add to do-input on page
@@ -133,11 +139,19 @@ const checkDoneOrDelete = (e) => {
 // remove item from page and localStorage
 const removeItem = (e) => {
     const getSaved = JSON.parse(localStorage.getItem("toDos"));
+    const active = JSON.parse(localStorage.getItem("active"));
+    const done = JSON.parse(localStorage.getItem("completed"));
     const element = e.target.parentElement; // the element to remove from page
     const elementId = e.target.id; // id of target to search index of item in LS
-    const getIndex = getSaved.findIndex(x => x.id == elementId); //find index in LS stored data to remove
+    const getIndex = getSaved.findIndex(x => x.id == elementId); //find index in LS all stored data to remove
+    const indexOfActive = active.findIndex(x => x.id == elementId); //find index in LS active stored data to remove
+    const indexOfDone = done.findIndex(x => x.id == elementId); //find index in LS done stored data to remove
     const deleted = getSaved.splice(getIndex, 1); // splice the deleted task from LS list
+    const rmFromAct = active.splice(indexOfActive, 1);
+    const rmFromDone = done.splice(indexOfActive, 1);
     localStorage.setItem("toDos", JSON.stringify(getSaved)); // save updatet list to LS
+    localStorage.setItem('active', JSON.stringify(active));
+    localStorage.setItem('completed', JSON.stringify(done));
     element.remove();
 };
 
@@ -158,6 +172,11 @@ const checkTodo = (e) => {
         let completedToDo = JSON.parse(localStorage.getItem("completed")) || [];
         completedToDo.push(done);
         localStorage.setItem("completed", JSON.stringify(completedToDo));
+
+        let activeToDo = JSON.parse(localStorage.getItem('active')) || [];
+        const index = activeToDo.findIndex(x => x.id == listId); //find index in LS stored data to place in doneToDo
+        activeToDo.splice(index, 1);
+        localStorage.setItem("active", JSON.stringify(activeToDo));    
     };
 };
 
@@ -191,14 +210,40 @@ const showCompleted = () => {
     });
 };
 
+const showActive = () => {
+    const ul = document.querySelector('ul');
+    ul.innerHTML = '';
+
+    let activeToDo = JSON.parse(localStorage.getItem("active")) || [];
+    activeToDo.forEach(element => {
+        let span = document.createElement("span");
+        let btn = document.createElement("button")
+        let checkbox = document.createElement("input")
+        let li = document.createElement("li");
+        let input = document.createElement('input');
+
+        span.setAttribute("id", `${element.id}`);
+        btn.classList.add("removeBtn");
+        btn.setAttribute("id", `${element.id}`);
+        btn.textContent = "x";
+        checkbox.setAttribute("type", "checkbox");
+        checkbox.classList.add("checkbox");
+        li.classList.add("toDoLi");
+        input.classList.add('inputTxt');
+        input.setAttribute('id', `i${element.id}`);
+        input.readOnly = true;
+
+        input.value = element.task;
+        li.append(input);
+        span.append(checkbox, li, btn);
+        document.querySelector("ul").appendChild(span);
+    });
+};
+
 // list of EventListeners
 document.addEventListener("DOMContentLoaded", getLocalStorage);
 document.querySelector(".addToList").addEventListener('click', addToDo);
 document.querySelector("ul").addEventListener('click', checkDoneOrDelete);
 document.querySelector('#all').addEventListener('click', getLocalStorage);
 document.querySelector('#done').addEventListener('click', showCompleted);
-//document.querySelector('#active').addEventListener('click', showActive);
-
-//variables to store input
-let activeToDo = [];
-let completedToDo = [];
+document.querySelector('#active').addEventListener('click', showActive);
