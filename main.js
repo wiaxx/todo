@@ -10,6 +10,21 @@ async function getBgImg() {
 window.addEventListener('load', getBgImg);
 */
 
+const updateLS = (array, key, value, storage) => {
+    const index = array.findIndex( x => x[key] == value);
+    const newArray = index >= 0 ? [
+        ...array.slice(0, index),
+        ...array.slice(index + 1)
+    ] : array;
+
+    localStorage.setItem(`${storage}`, JSON.stringify(newArray))
+
+    return index >= 0 ? [
+        ...array.slice(0, index),
+        ...array.slice(index + 1)
+    ] : array;
+};
+
 const updateToDo = (e, text) => {
     let toDoList = JSON.parse(localStorage.getItem('toDos'));
     let activeToDo = JSON.parse(localStorage.getItem('active'));
@@ -86,6 +101,7 @@ const addToDo = (e) => {
     const txtInput = document.querySelector(".txt").value;
     if (txtInput === "") {
         alert("Please write a new task");
+        return;
     } else {
         const inputToDo = {
             id: id,
@@ -152,32 +168,18 @@ const checkClickedBtn = (e) => {
 
 // remove item from page and localStorage
 const removeItem = (e) => {
-    const getSaved = JSON.parse(localStorage.getItem("toDos"));
+    const allSaved = JSON.parse(localStorage.getItem("toDos"));
     const active = JSON.parse(localStorage.getItem("active"));
     const done = JSON.parse(localStorage.getItem("completed"));
+    
     const element = e.target.parentElement; // the element to remove from page
     const elementId = e.target.id; // id of target to search index of item in LS
-    const getIndex = getSaved.findIndex(x => x.id == elementId); //find index in toDos LS stored data to remove
-    const indexOfActive = active.findIndex(x => x.id == elementId); //find index in active LS stored data to remove
-    const indexOfDone = done.findIndex(x => x.id == elementId); //find index in done LS stored data to remove
-    if (getIndex === -1) {
-        //console.log(getIndex);
-    } else {
-        const deleted = getSaved.splice(getIndex, 1); // splice the deleted task from LS list
-        localStorage.setItem("toDos", JSON.stringify(getSaved)); // save updatet list to LS
-    };
-    if (indexOfActive === -1) {
-        //console.log(indexOfActive);
-    } else {
-        const rmFromAct = active.splice(indexOfActive, 1); // splice the deleted task from LS list
-        localStorage.setItem('active', JSON.stringify(active)); // save updatet list to LS
-    };
-    if (indexOfDone === -1) {
-        //console.log(indexOfDone);
-    } else {
-        const rmFromDone = done.splice(indexOfDone, 1); // splice the deleted task from LS list
-        localStorage.setItem('completed', JSON.stringify(done)); // save updatet list to LS
-    };
+
+    const allToDo = updateLS(allSaved, "id", elementId, "toDos");
+    const activeToDo = updateLS(active, "id", elementId, "active");
+    const doneToDo = updateLS(done, "id", elementId, "completed");
+
+    //console.log(allToDo, activeToDo, doneToDo)
     element.remove();
 };
 
@@ -206,42 +208,11 @@ const checkTodo = (e) => {
     };
 };
 
-const showCompleted = () => {
+const showToDos = (array) => {
     const ul = document.querySelector('ul');
     ul.innerHTML = '';
 
-    let completedToDo = JSON.parse(localStorage.getItem("completed")) || [];
-    completedToDo.forEach(element => {
-        let span = document.createElement("span");
-        let btn = document.createElement("button")
-        let checkbox = document.createElement("input")
-        let li = document.createElement("li");
-        let input = document.createElement('input');
-
-        span.setAttribute("id", `${element.id}`);
-        btn.classList.add("removeBtn");
-        btn.setAttribute("id", `${element.id}`);
-        btn.textContent = "x";
-        checkbox.setAttribute("type", "checkbox");
-        checkbox.classList.add("checkbox");
-        li.classList.add("toDoLi");
-        input.classList.add('inputTxt');
-        input.setAttribute('id', `i${element.id}`);
-        input.readOnly = true;
-
-        input.value = element.task;
-        li.append(input);
-        span.append(checkbox, li, btn);
-        document.querySelector("ul").appendChild(span);
-    });
-};
-
-const showActive = () => {
-    const ul = document.querySelector('ul');
-    ul.innerHTML = '';
-
-    let activeToDo = JSON.parse(localStorage.getItem("active")) || [];
-    activeToDo.forEach(element => {
+    array.forEach(element => {
         let span = document.createElement("span");
         let btn = document.createElement("button")
         let checkbox = document.createElement("input")
@@ -271,5 +242,11 @@ document.addEventListener("DOMContentLoaded", getLocalStorage);
 document.querySelector(".addToList").addEventListener('click', addToDo);
 document.querySelector("ul").addEventListener('click', checkClickedBtn);
 document.querySelector('#all').addEventListener('click', getLocalStorage);
-document.querySelector('#done').addEventListener('click', showCompleted);
-document.querySelector('#active').addEventListener('click', showActive);
+document.querySelector('#done').addEventListener('click', () => {
+    let completedToDo = JSON.parse(localStorage.getItem("completed")) || [];
+    showToDos(completedToDo);
+});
+document.querySelector('#active').addEventListener('click', () => {
+    let activeToDo = JSON.parse(localStorage.getItem("active")) || [];
+    showToDos(activeToDo);
+});
